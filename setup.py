@@ -8,7 +8,7 @@ PKGNAME = 'plotEnv'
 MAINTAINER = 'Lento Manickathan'
 MAINTAINER_EMAIL = 'lento.manickathan@gmail.com'
 URL = 'https://github.com/lento234/plotEnv',
-LICENSE = 'GNU GENERAL PUBLIC LICENSE'
+LICENSE = 'GNU General Public License (GPL)'
 VERSION = '0.0.1.dev0'
 
 try:
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         install_requires=check_dependencies(),
         packages=['plotEnv'],
         classifiers=['Intended Audience :: Science/Research',
-                     'License :: OSI Approved :: GNU Affero General Public License v3'
+                     'License :: OSI Approved :: GNU General Public License (GPL)',
                      'Topic :: Scientific/Engineering :: Visualization',
                      'Operating System :: POSIX',
                      'Programming Language :: Python :: 2.7',
