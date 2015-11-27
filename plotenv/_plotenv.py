@@ -19,6 +19,7 @@ import numpy as _np
 import matplotlib as _mpl
 from matplotlib import pyplot as _plt
 from seaborn import despine as _despine
+from _cm import _cmb_data
 
 # CONSTANTS
 RED     = '#e74c3c'
@@ -176,11 +177,26 @@ def surfacePlotPalette():
 
     """
 
-    return dict(DIV = _mpl.cm.Spectral_r,
-                SEQ_HOT_R  = _mpl.colors.ListedColormap(_mpl.cm.Spectral(_np.arange(0,128))),
-                SEQ_COLD   = _mpl.colors.ListedColormap(_mpl.cm.Spectral(_np.arange(128,256))),
-                SEQ_HOT    = _mpl.colors.ListedColormap(_mpl.cm.Spectral_r(_np.arange(128,256))),
-                SEQ_COLD_R  = _mpl.colors.ListedColormap(_mpl.cm.Spectral_r(_np.arange(0,128))))
+    # Palette CMB: based on planck cosmic microwave background radiation cmap
+    # Info : http://zonca.github.io/2013/09/Planck-CMB-map-at-high-resolution.html
+    CMB = {'DIV'    : _mpl.colors.ListedColormap(zip(_cmb_data[:,0],_cmb_data[:,1],_cmb_data[:,2])),
+           'HOT'    : _mpl.colors.ListedColormap(zip(_cmb_data[64:,0],_cmb_data[64:,1],_cmb_data[64:,2])),
+           'COLD'   : _mpl.colors.ListedColormap(zip(_cmb_data[:64,0],_cmb_data[:64,1],_cmb_data[:64,2])),
+           'DIV_R'  : _mpl.colors.ListedColormap(zip(_cmb_data[::-1,0],_cmb_data[::-1,1],_cmb_data[::-1,2])),
+           'HOT_R'  : _mpl.colors.ListedColormap(zip(_cmb_data[64::-1,0],_cmb_data[64::-1,1],_cmb_data[64::-1,2])),
+           'COLD_R' : _mpl.colors.ListedColormap(zip(_cmb_data[:64:-1,0],_cmb_data[:64:-1,1],_cmb_data[:64:-1,2]))
+           }
+
+    # Palette spectral
+    SPECTRAL = {'DIV'    : _mpl.cm.Spectral_r,
+                'HOT'    : _mpl.colors.ListedColormap(_mpl.cm.Spectral_r(_np.arange(128,256))),
+                'COLD'   : _mpl.colors.ListedColormap(_mpl.cm.Spectral(_np.arange(128,256))),
+                'DIV_R'  : _mpl.cm.Spectral,
+                'HOT_R'  : _mpl.colors.ListedColormap(_mpl.cm.Spectral(_np.arange(0,128))),
+                'COLD_R' : _mpl.colors.ListedColormap(_mpl.cm.Spectral_r(_np.arange(0,128)))
+                }
+
+    return {'CMB' : CMB, 'SPECTRAL' : SPECTRAL}
 
 
 def cleanupFigure(despine=True, tightenFigure=True,):
