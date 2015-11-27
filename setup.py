@@ -9,7 +9,7 @@ MAINTAINER = 'Lento Manickathan'
 MAINTAINER_EMAIL = 'lento.manickathan@gmail.com'
 URL = 'https://github.com/lento234/plotEnv',
 LICENSE = 'GNU General Public License (GPL)'
-VERSION = '0.0.1.dev0'
+VERSION = '0.0.1.dev1'
 
 try:
     from setuptools import setup
