@@ -4,7 +4,7 @@ import os
 
 DESCRIPTION   = "Python plotting wrapper utilizing matplotlib and seaborn"
 
-PKGNAME = 'plotEnv'
+PKGNAME = 'plotenv'
 MAINTAINER = 'Lento Manickathan'
 MAINTAINER_EMAIL = 'lento.manickathan@gmail.com'
 URL = 'https://github.com/lento234/plotEnv',
@@ -48,7 +48,7 @@ if __name__ == "__main__":
         url=URL,
         version=VERSION,
         install_requires=check_dependencies(),
-        packages=['plotEnv'],
+        packages=['plotenv'],
         classifiers=['Intended Audience :: Science/Research',
                      'License :: OSI Approved :: GNU General Public License (GPL)',
                      'Topic :: Scientific/Engineering :: Visualization',

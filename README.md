@@ -1,4 +1,4 @@
-plotEnv
+plotenv
 =======
 
     Python plotting wrapper utilizing matplotlib and seaborn
@@ -6,9 +6,9 @@ plotEnv
 Changelog
 ---------
 
-#### 0.0.1.dev0 :
+#### 0.0.1.dev2 :
 
-- added `plotEnv`: custom plotting wrapper
+- added `plotenv`: custom plotting wrapper
 
 Authors
 -------
@@ -32,8 +32,8 @@ Installation
 
 To install the development version, run
 
-    pip install plotEnv
+    pip install plotenv
 
 or alternatively
 
-    pip install git+git://github.com/lento234/plotEnv.git
+    pip install git+git://github.com/lento234/plotenv.git
