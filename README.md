@@ -6,6 +6,12 @@ plotenv
 Changelog
 ---------
 
+#### 0.0.2.dev1 :
+
+- added `examples`: basic single line plot, multi-line plot and contourf plot
+- reorganized modules
+- added custom cosmic microwave background (CMB) colormap
+
 #### 0.0.1.dev2 :
 
 - added `plotenv`: custom plotting wrapper
