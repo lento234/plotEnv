@@ -1,5 +1,8 @@
 """
 import out plotenv modules
 """
+# Import functions
+from plotenv import *
 
-from _plotenv import *
+# Unset recursive module
+del plotenv

@@ -1,6 +1,10 @@
-
+"""
+Custom colormaps
+"""
 import numpy as _np
 
+# Planck cosmic microwave background (CMB) colormap
+# More info: http://zonca.github.io/2013/09/Planck-CMB-map-at-high-resolution.html
 _cmb_data = _np.array(  [[ 0.      ,  0.025737,  0.541892],
                          [ 0.      ,  0.047366,  0.709536],
                          [ 0.      ,  0.067675,  0.714596],

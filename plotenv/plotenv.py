@@ -181,10 +181,10 @@ def surfacePlotPalette():
     # Info : http://zonca.github.io/2013/09/Planck-CMB-map-at-high-resolution.html
     CMB = {'DIV'    : _mpl.colors.ListedColormap(zip(_cmb_data[:,0],_cmb_data[:,1],_cmb_data[:,2])),
            'HOT'    : _mpl.colors.ListedColormap(zip(_cmb_data[64:,0],_cmb_data[64:,1],_cmb_data[64:,2])),
-           'COLD'   : _mpl.colors.ListedColormap(zip(_cmb_data[:64,0],_cmb_data[:64,1],_cmb_data[:64,2])),
+           'COLD'  : _mpl.colors.ListedColormap(zip(_cmb_data[64::-1,0],_cmb_data[64::-1,1],_cmb_data[64::-1,2])),
            'DIV_R'  : _mpl.colors.ListedColormap(zip(_cmb_data[::-1,0],_cmb_data[::-1,1],_cmb_data[::-1,2])),
-           'HOT_R'  : _mpl.colors.ListedColormap(zip(_cmb_data[64::-1,0],_cmb_data[64::-1,1],_cmb_data[64::-1,2])),
-           'COLD_R' : _mpl.colors.ListedColormap(zip(_cmb_data[:64:-1,0],_cmb_data[:64:-1,1],_cmb_data[:64:-1,2]))
+           'HOT_R' : _mpl.colors.ListedColormap(zip(_cmb_data[:64:-1,0],_cmb_data[:64:-1,1],_cmb_data[:64:-1,2])),
+           'COLD_R'   : _mpl.colors.ListedColormap(zip(_cmb_data[:64,0],_cmb_data[:64,1],_cmb_data[:64,2]))
            }
 
     # Palette spectral
@@ -237,9 +237,17 @@ def cleanupFigure(despine=True, tightenFigure=True,):
     _plt.draw()
 
 
-def colorbar(ticks,orientation='vertical',splitTicks=False,**kw):
+def colorbar(ticks,orientation='vertical',splitTicks=False,strFormat='%.2g',label=None,**kw):
     """
     Customized colorbar
+    
+    Parameters
+    ----------
+    ticks
+    orientation
+    splitTicks
+    strFormat  : '%.2g' or None
+                  None: default to matplotlib formatting.
     """
 
     # determine colorbar position
@@ -259,17 +267,18 @@ def colorbar(ticks,orientation='vertical',splitTicks=False,**kw):
 
     # Default colorbar params
     cbParams = {'aspect'       : aspect,
-                'drawedges'    : True,
-                'format'       : '%.2g',
+                'drawedges'    : True if len(_plt.gca().collections) < 22 else False,
+                'format'       : strFormat,
                 'orientation'  : orientation,
                 'pad'          : pad,
                 'spacing'      : 'proportional',
-                'ticks'        : ticks}
+                'ticks'        : ticks
+                }
 
     # Modify cb params
     cbParams.update(kw)
 
-    if cbParams['format'] == 'exp':
+    if cbParams['format'] == 'default':
         cbParams['format'] = None # Default
 
     # Draw colorbar
@@ -286,6 +295,15 @@ def colorbar(ticks,orientation='vertical',splitTicks=False,**kw):
                                         tick1On=False,tick2On=True)
         elif orientation[0] == 'v':
             NotImplementedError("orientation 'vertical' not implemented")
+        else:
+            ValueError("orientation '%s' unknown" % orientation)
+            
+    # Add label
+    if label:
+        if orientation[0] == 'h':
+            cb.ax.set_xlabel(label)            
+        elif orientation[0] == 'v':
+            cb.ax.set_ylabel(label)            
         else:
             ValueError("orientation '%s' unknown" % orientation)
 

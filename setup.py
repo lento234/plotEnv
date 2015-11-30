@@ -7,9 +7,9 @@ DESCRIPTION   = "Python plotting wrapper utilizing matplotlib and seaborn"
 PKGNAME = 'plotenv'
 MAINTAINER = 'Lento Manickathan'
 MAINTAINER_EMAIL = 'lento.manickathan@gmail.com'
-URL = 'https://github.com/lento234/plotEnv',
+URL = 'https://github.com/lento234/plotenv',
 LICENSE = 'GNU General Public License (GPL)'
-VERSION = '0.0.1.dev1'
+VERSION = '0.0.1.dev2'
 
 try:
     from setuptools import setup
