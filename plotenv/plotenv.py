@@ -151,16 +151,10 @@ def linePlotPalette(numColors):
     if numColors == 1:
         # Midnight blue
         palette = [DARK]
-    elif numColors == 2:
-        # Alizarin, Peter river
-        palette = [RED, BLUE]
-    elif numColors == 3:
-        # Alizarin, Emerald, Peter river
-        palette = [RED, GREEN, BLUE]
-    elif numColors >= 4 and numColors <= 9:
-        # Alizarin, Sun Flower, Emerald, Peter river, Wisteria, Midnight blue
+    elif numColors >= 2 and numColors <= 9:
+        # Alizarin, Peter river, Emerald, Sun Flower, Wisteria, Midnight blue
         # Asbestos, Green sea, Pumpkin
-        palette = [RED, YELLOW, GREEN, BLUE, VIOLET, DARK, GRAY, DARKGREEN, ORANGE][:numColors]
+        palette = [RED, BLUE, GREEN, YELLOW, VIOLET, DARK, GRAY, DARKGREEN, ORANGE][:numColors]
     else:
         return NotImplementedError('numColors should be 1 to 9.')
 
