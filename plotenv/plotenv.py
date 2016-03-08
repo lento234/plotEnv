@@ -7,6 +7,14 @@ plotEnv
 Custom plotting environment using seaborn (based on Matplotlib). Color scheme using
 flat ui (http://designmodo.github.io/Flat-UI/).
 
+purpose:
+    - customization of plots for publishing (journals, thesis)
+    - beautiful plots
+    - accurate representation
+
+todo:
+    - presentation / publishing format flag
+
 
 :First Added:   2015-05-25
 :Last Modified: 2015-11-27
@@ -20,6 +28,9 @@ import matplotlib as _mpl
 from matplotlib import pyplot as _plt
 from seaborn import despine as _despine
 from _cm import _cmb_data
+from matplotlib.offsetbox import AnchoredText as _AnchoredText
+from matplotlib.patheffects import withStroke as _withStroke
+from mpl_toolkits.axes_grid1 import ImageGrid as _ImageGrid
 
 # CONSTANTS
 RED     = '#e74c3c'
@@ -154,7 +165,8 @@ def linePlotPalette(numColors):
     elif numColors >= 2 and numColors <= 9:
         # Alizarin, Peter river, Emerald, Sun Flower, Wisteria, Midnight blue
         # Asbestos, Green sea, Pumpkin
-        palette = [RED, BLUE, GREEN, YELLOW, VIOLET, DARK, GRAY, DARKGREEN, ORANGE][:numColors]
+        #palette = [RED, BLUE, GREEN, YELLOW, VIOLET, DARK, GRAY, DARKGREEN, ORANGE][:numColors]
+        palette = [RED, BLUE, DARKGREEN, ORANGE, VIOLET, DARK, GREEN, GRAY, YELLOW][:numColors]
     else:
         return NotImplementedError('numColors should be 1 to 9.')
 
@@ -234,7 +246,7 @@ def cleanupFigure(despine=True, tightenFigure=True,):
 def colorbar(ticks,orientation='vertical',splitTicks=False,strFormat='%.2g',label=None,**kw):
     """
     Customized colorbar
-    
+
     Parameters
     ----------
     ticks
@@ -291,13 +303,13 @@ def colorbar(ticks,orientation='vertical',splitTicks=False,strFormat='%.2g',labe
             NotImplementedError("orientation 'vertical' not implemented")
         else:
             ValueError("orientation '%s' unknown" % orientation)
-            
+
     # Add label
     if label:
         if orientation[0] == 'h':
-            cb.ax.set_xlabel(label)            
+            cb.ax.set_xlabel(label)
         elif orientation[0] == 'v':
-            cb.ax.set_ylabel(label)            
+            cb.ax.set_ylabel(label)
         else:
             ValueError("orientation '%s' unknown" % orientation)
 
@@ -305,3 +317,57 @@ def colorbar(ticks,orientation='vertical',splitTicks=False,strFormat='%.2g',labe
     _plt.draw()
 
     return cb
+
+def subtitles(axes,titles,**kwargs):
+    """
+    add titles to sub figures
+
+    example
+    -------
+    titleList = plotenv.subtitles(axes=(ax1,ax2),titles=["(a)","(b)"],
+                                  loc=2,size=18.0)
+    """
+
+    loc  = kwargs.pop('loc', 2)
+    size = kwargs.pop('size', DEFAULT_RCPARAMS['legend.fontsize'])
+
+    # Add title to each axis
+    ats = []
+    for ax,title in zip(axes,titles):
+        at = _AnchoredText(title, loc=loc, prop=dict(size=size),
+                          pad=0., borderpad=0.5,
+                          frameon=False, **kwargs)
+        ax.add_artist(at)
+        at.txt._text.set_path_effects([_withStroke(foreground="w", linewidth=3)])
+        ats.append(at)
+
+    return ats
+
+def imagegrid(fig,nrow_ncols,xlabel=None,ylabel=None,**kwargs):
+    """
+    create an image grid - multiple plots
+    """
+
+    # multi-axes grid
+    grid = _ImageGrid(fig, 111,
+                      nrows_ncols=nrow_ncols,
+                      direction=kwargs.pop('direction','column'),
+                      axes_pad=kwargs.pop('axes_pad',0.5),
+                      add_all=kwargs.pop('add_all',True),
+                      #   label_mode="all",
+                      share_all=kwargs.pop('share_all',False),
+                      cbar_location=kwargs.pop('cbar_location','right'),
+                      cbar_mode=kwargs.pop('cbar_mode','single'),
+                      cbar_size=kwargs.pop('cbar_size','2%'),
+                      cbar_pad=kwargs.pop('cbar_pad',0.25))
+
+    # Add x,y labels only on the edges
+    nrow,ncol = nrow_ncols
+    if xlabel is not None:
+        for i in nrow*_np.arange(ncol)+nrow-1:
+            grid[i].set_xlabel(xlabel)
+    if ylabel is not None:
+        for i in range(nrow):
+            grid[i].set_ylabel(ylabel)
+
+    return grid
