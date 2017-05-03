@@ -32,6 +32,7 @@ from matplotlib.offsetbox import AnchoredText as _AnchoredText
 from matplotlib.patheffects import withStroke as _withStroke
 from mpl_toolkits.axes_grid1 import ImageGrid as _ImageGrid
 
+
 # CONSTANTS
 RED     = '#e74c3c'
 YELLOW  = '#f1c40f'
@@ -42,6 +43,10 @@ DARK    = '#2c3e50'
 GRAY    = '#7f8c8d'
 DARKGREEN = '#16a085'
 ORANGE  = '#d35400'
+DARKRED = '#c0392b'
+DARKBLUE = '#2980b9'
+PUREBLACK = 'k'
+
 
 MARKERTYPES = ['o', 's', 'D', 'v', '^', '<', '>','*', ',', '.', 'p', 'd']
 
@@ -50,42 +55,59 @@ DEFAULT_RCPARAMS = {'axes.axisbelow'  : True,
                     'axes.facecolor'  : 'white',
                     'axes.labelcolor' : '0.15',
                     'axes.grid'       : False,
-                    'axes.labelsize'  : 16,
+                    'axes.labelsize'  : 20,
                     'axes.linewidth'  : 1.25,
                     'axes.titlesize'  : 12,
                     'figure.figsize'  : _np.array([2./(_np.sqrt(5)-1), 1])*5,
-                    'font.family'     : ['sans-serif'],
-                    'font.sans-serif' : ['Arial', 'Liberation Sans',
-                                         'Bitstream Vera Sans', 'sans-serif'],
+                    # 'font.family'     : ['sans-serif'],
+                    #'font.sans-serif' : ['Arial', 'Liberation Sans',
+                    #                     'Bitstream Vera Sans', 'sans-serif'],
                     'grid.color'      : '0.8',
                     'grid.linestyle'  : '-',
                     'grid.linewidth'  : 1,
                     'interactive'     : True,
-                    'legend.fontsize' : 10,
+                    'legend.fontsize' : 16,
                     'legend.frameon'  : False,
                     'legend.loc'      : 'best',
+                    'legend.labelspacing': 0.05,
                     'legend.numpoints': 1,
                     'legend.scatterpoints' : 1,
-                    'lines.linewidth' : 1.2,
+                    'lines.linewidth' : 2,#1.2,
                     'lines.markeredgewidth' : 0.,
-                    'lines.markersize': 7,
+                    'lines.markersize': 12,
                     'lines.solid_capstyle' : 'round',
+                    #'mathtext.fontset': 'cm',
                     'patch.linewidth' : .3,
-                    'savefig.dpi'     : 250,
+                    'savefig.dpi'     : 350,
                     'savefig.format'  : 'pdf',
                     'text.color'      : '0.15',
                     'xtick.color'     : '0.15',
                     'xtick.direction' : 'out',
-                    'xtick.labelsize' : 14,
+                    'xtick.labelsize' : 18,
                     'xtick.major.pad' : 7,
                     'xtick.major.size': 6,
                     'xtick.minor.size': 3,
                     'ytick.color'     : '0.15',
                     'ytick.direction' : 'out',
-                    'ytick.labelsize' : 14,
+                    'ytick.labelsize' : 18,
                     'ytick.major.pad' : 7,
                     'ytick.major.size': 6,
                     'ytick.minor.size': 3}
+
+LINESTYLE = [(0, ()), # solid
+            #('loosely dotted',      (0, (1, 10))),
+             #('dotted',              (0, (1, 5))),
+             #('loosely dashed',      (0, (5, 10))),
+             #('dashed',              (0, (5, 5))),
+            (0, (5, 5)), # densely dashed
+             #('loosely dashdotted',  (0, (3, 10, 1, 10))),
+             #('dashdotted',          (0, (3, 5, 1, 5))),
+            (0, (3, 5, 1, 5)), # 'densely dashdotted'
+             #('loosely dashdotdotted', (0, (3, 10, 1, 10, 1, 10))),
+             #('dashdotdotted',         (0, (3, 5, 1, 5, 1, 5))),
+             #('densely dashdotdotted', (0, (3, 1, 1, 1, 1, 1)))])
+             (0, (1, 5)), # densely dotted
+             ]
 
 def set(plotType='line', numColors=1, interactive=True):
     """
@@ -161,8 +183,12 @@ def linePlotPalette(numColors):
     # Define the color palatte
     if numColors == 1:
         # Midnight blue
-        palette = [DARK]
-    elif numColors >= 2 and numColors <= 9:
+        palette = [PUREBLACK]
+
+    elif numColors == 3:
+        palette = [PUREBLACK,DARKRED,DARKBLUE]
+
+    elif numColors > 3 and numColors <= 9:
         # Alizarin, Peter river, Emerald, Sun Flower, Wisteria, Midnight blue
         # Asbestos, Green sea, Pumpkin
         #palette = [RED, BLUE, GREEN, YELLOW, VIOLET, DARK, GRAY, DARKGREEN, ORANGE][:numColors]
@@ -205,7 +231,7 @@ def surfacePlotPalette():
     return {'CMB' : CMB, 'SPECTRAL' : SPECTRAL}
 
 
-def cleanupFigure(despine=True, tightenFigure=True,):
+def cleanupFigure(despine=True, tightenFigure=True):
     """
     Cleans up the figure by:
         1) Removing unnecessary top and right spines using seaborn's `despine` function
@@ -371,3 +397,15 @@ def imagegrid(fig,nrow_ncols,xlabel=None,ylabel=None,**kwargs):
             grid[i].set_ylabel(ylabel)
 
     return grid
+
+
+def add_text(text,loc=2,size=25,color='k',ax=None):
+    at = _AnchoredText(text, loc=loc, prop=dict(size=size,weight='bold',color=color),
+                      pad=0., borderpad=0.5,frameon=False)
+    
+    if ax is None:
+        ax = _plt.gca()
+    ax.add_artist(at)
+    #at.txt._text.set_path_effects([_withStroke(foreground="w", linewidth=3)])
+
+    return at

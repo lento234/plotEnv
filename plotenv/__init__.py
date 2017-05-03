@@ -8,4 +8,3 @@ from plotenv import *
 __doc__ = plotenv.__doc__
 
 # Unset recursive module
-del plotenv
