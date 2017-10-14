@@ -48,7 +48,8 @@ DARKBLUE = '#2980b9'
 PUREBLACK = 'k'
 
 
-MARKERTYPES = ['o', 's', 'D', 'v', '^', '<', '>','*', ',', '.', 'p', 'd']
+#MARKERTYPES = ['o', 's', 'D', 'v', '^', '<', '>','*', ',', '.', 'p', 'd']
+MARKERTYPES = ['o', 's', 'D', 'v', '^', '<', '>','*', 'p', 'd',',', '.',]
 
 DEFAULT_RCPARAMS = {'axes.axisbelow'  : True,
                     'axes.edgecolor'  : '0.15',
@@ -411,3 +412,32 @@ def add_text(text,loc=2,size=25,color='k',ax=None):
     #at.txt._text.set_path_effects([_withStroke(foreground="w", linewidth=3)])
 
     return at
+
+
+
+def quadBezierCurve(p0=[0,0],p1=[0.5,1],p2=[1,0],n=100):
+    """
+    quadratic bézier curve
+    
+    More info : https://en.wikipedia.org/wiki/Parabola
+    """
+    t = _np.linspace(0,1,n)
+    p0 = _np.array(p0).reshape(-1,1)
+    p1 = _np.array(p1).reshape(-1,1)
+    p2 = _np.array(p2).reshape(-1,1)
+    
+    return (p0 -  2.0*p1 + p2)*t*t + (-2.0*p0 + 2*p1)*t + p0
+
+def cubicBezierCurve(p0=[0,0],p1=[0.5,1],p2=[0.5,1],p3=[1,0],n=100):
+    """
+    cubic bézier curve
+    
+    More info : https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Cubic_B.C3.A9zier_curves
+    """
+    t = _np.linspace(0,1,n)
+    p0 = _np.array(p0).reshape(-1,1)
+    p1 = _np.array(p1).reshape(-1,1)
+    p2 = _np.array(p2).reshape(-1,1)
+    p3 = _np.array(p3).reshape(-1,1)
+    
+    return (1-t)*quadBezierCurve(p0,p1,p2,n) + t*quadBezierCurve(p1,p2,p3,n)
