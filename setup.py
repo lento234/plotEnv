@@ -53,5 +53,5 @@ if __name__ == "__main__":
                      'License :: OSI Approved :: GNU General Public License (GPL)',
                      'Topic :: Scientific/Engineering :: Visualization',
                      'Operating System :: POSIX',
-                     'Programming Language :: Python :: 2.7',
+                     'Programming Language :: Python :: 3.6',
                      ])

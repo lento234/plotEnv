@@ -1,39 +1,42 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-plotEnv
+plotenv
 =======
 
-Custom plotting environment using seaborn (based on Matplotlib). Color scheme using
-flat ui (http://designmodo.github.io/Flat-UI/).
+Wrapper for matplotlib and seaborn. Provides customised plotting enviroment
+for publishable worthy.
 
 purpose:
     - customization of plots for publishing (journals, thesis)
     - beautiful plots
-    - accurate representation
-
-todo:
-    - presentation / publishing format flag
-
-
+    
 :First Added:   2015-05-25
-:Last Modified: 2015-11-27
+:Last Modified: 2018-02-16
 :Author:        Lento Manickathan
 
 """
 
+# Local modules
+from ._cm import _cmb_data
+
 # Import required modules
 import numpy as _np
-import matplotlib as _mpl
-from matplotlib import pyplot as _plt
+from cycler import cycler as _cycler
+
+# Seaborn
+import seaborn as _sns
 from seaborn import despine as _despine
-from _cm import _cmb_data
+
+# Matplotlib
+import matplotlib as _mpl
+import matplotlib.pyplot as _plt
 from matplotlib.offsetbox import AnchoredText as _AnchoredText
 from matplotlib.patheffects import withStroke as _withStroke
 from mpl_toolkits.axes_grid1 import ImageGrid as _ImageGrid
+import matplotlib.dates as _mdates
 
-
-# CONSTANTS
+# CONSTANTS (colors)
 RED     = '#e74c3c'
 YELLOW  = '#f1c40f'
 GREEN   = '#2ecc71'
@@ -47,10 +50,10 @@ DARKRED = '#c0392b'
 DARKBLUE = '#2980b9'
 PUREBLACK = 'k'
 
-
-#MARKERTYPES = ['o', 's', 'D', 'v', '^', '<', '>','*', ',', '.', 'p', 'd']
+# Marker style
 MARKERTYPES = ['o', 's', 'D', 'v', '^', '<', '>','*', 'p', 'd',',', '.',]
 
+# matplotlib parameters
 DEFAULT_RCPARAMS = {'axes.axisbelow'  : True,
                     'axes.edgecolor'  : '0.15',
                     'axes.facecolor'  : 'white',
@@ -112,28 +115,64 @@ LINESTYLE = [(0, ()), # solid
              (0, (1, 5)), # densely dotted
              ]
 
-def set(plotType='line', numColors=1, interactive=True):
+
+# Pollute (steal) matplotlib methods
+#figure = _plt.figure
+#plot = _plt.plot
+pcolor = _plt.pcolor
+imshow = _plt.imshow
+contourf = _plt.contourf
+pause = _plt.pause
+clf = _plt.clf
+close = _plt.close
+gca = _plt.gca
+gcf = _plt.gcf
+plot = _plt.plot
+plt = _plt # For more
+
+
+# Pollute (steal) seaborn methods
+kdeplot = _sns.kdeplot
+jointplot = _sns.jointplot
+heatmap = _sns.heatmap
+sns = _sns # For more
+
+# Custom wrapper for figure
+def _wrapper_figure(function):
+    def wrapper(*args,**kwargs):
+        fig = function(*args,**kwargs)
+        ax = fig.gca()
+        return fig, ax
+    wrapper.__doc__ = function.__doc__
+    return wrapper
+
+figure = _wrapper_figure(_plt.figure)
+    
+
+def initialize(plotType='both', numColors=10, interactive=True):
     """
 
     Parameters
     ----------
-    plotType : 'line', 'surface'
+    plotType : 'line', 'surface', 'both' (default)
 
-    numColors : int, or one of {1 (default), 3, 9}
+    numColors : int, or one of {1, 3, 10 (default), ##}
                 The number of colour required for plotting.
 
     interactive : bool
-                  Turn plot interactive on
+                  Turn plot interactive on (default)
 
     See Also
     --------
     Palette : Line plot
-                Flat ui: http://designmodo.github.io/Flat-UI/
+                viridis
               Surface plot
-                matplotlib 'Spectral'
+                viridis
 
     Examples
     --------
+    >>> palette = set() # plotType='both', numColors=10, interactive=True
+    or 
     >>> palette = set(plotType='line', numColors=2)
     or
     >>> palette = set(plotType='surface')
@@ -151,13 +190,19 @@ def set(plotType='line', numColors=1, interactive=True):
 
         # Set Palette
         palette = linePlotPalette(numColors)
-        rcParams['axes.color_cycle'] = list(palette)
+        #rcParams['axes.color_cycle'] = list(palette)
+        rcParams['axes.prop_cycle'] = _cycler('color', list(palette))
 
     elif plotType == 'surface':
 
         # Set Palette
         palette = surfacePlotPalette()
 
+    elif plotType == 'both':
+        # Set colormap palette
+        palette = surfacePlotPalette()
+        palette['colors'] = linePlotPalette(numColors)
+        rcParams['axes.prop_cycle'] = _cycler('color', list(palette['colors']))
     else:
         return NotImplementedError('plot type unknown or not implemented')
 
@@ -191,13 +236,14 @@ def linePlotPalette(numColors):
     elif numColors == 3:
         palette = [PUREBLACK,DARKRED,DARKBLUE]
 
-    elif numColors > 3 and numColors <= 9:
-        # Alizarin, Peter river, Emerald, Sun Flower, Wisteria, Midnight blue
-        # Asbestos, Green sea, Pumpkin
-        #palette = [RED, BLUE, GREEN, YELLOW, VIOLET, DARK, GRAY, DARKGREEN, ORANGE][:numColors]
-        palette = [RED, BLUE, DARKGREEN, ORANGE, VIOLET, DARK, GREEN, GRAY, YELLOW][:numColors]
+    # elif numColors > 3 and numColors <= 9:
+    #     # Alizarin, Peter river, Emerald, Sun Flower, Wisteria, Midnight blue
+    #     # Asbestos, Green sea, Pumpkin
+    #     #palette = [RED, BLUE, GREEN, YELLOW, VIOLET, DARK, GRAY, DARKGREEN, ORANGE][:numColors]
+    #     palette = [RED, BLUE, DARKGREEN, ORANGE, VIOLET, DARK, GREEN, GRAY, YELLOW][:numColors]
     else:
-        return NotImplementedError('numColors should be 1 to 9.')
+        #return NotImplementedError('numColors should be 1 to 9.')
+        palette = _plt.cm.viridis(_np.linspace(0,1,numColors))
 
     return palette
 
@@ -214,12 +260,12 @@ def surfacePlotPalette():
 
     # Palette CMB: based on planck cosmic microwave background radiation cmap
     # Info : http://zonca.github.io/2013/09/Planck-CMB-map-at-high-resolution.html
-    CMB = {'DIV'    : _mpl.colors.ListedColormap(zip(_cmb_data[:,0],_cmb_data[:,1],_cmb_data[:,2])),
-           'HOT'    : _mpl.colors.ListedColormap(zip(_cmb_data[64:,0],_cmb_data[64:,1],_cmb_data[64:,2])),
-           'COLD'  : _mpl.colors.ListedColormap(zip(_cmb_data[64::-1,0],_cmb_data[64::-1,1],_cmb_data[64::-1,2])),
-           'DIV_R'  : _mpl.colors.ListedColormap(zip(_cmb_data[::-1,0],_cmb_data[::-1,1],_cmb_data[::-1,2])),
-           'HOT_R' : _mpl.colors.ListedColormap(zip(_cmb_data[:64:-1,0],_cmb_data[:64:-1,1],_cmb_data[:64:-1,2])),
-           'COLD_R'   : _mpl.colors.ListedColormap(zip(_cmb_data[:64,0],_cmb_data[:64,1],_cmb_data[:64,2]))
+    CMB = {'DIV'    : _mpl.colors.ListedColormap(list(zip(_cmb_data[:,0],_cmb_data[:,1],_cmb_data[:,2]))),
+           'HOT'    : _mpl.colors.ListedColormap(list(zip(_cmb_data[64:,0],_cmb_data[64:,1],_cmb_data[64:,2]))),
+           'COLD'  : _mpl.colors.ListedColormap(list(zip(_cmb_data[64::-1,0],_cmb_data[64::-1,1],_cmb_data[64::-1,2]))),
+           'DIV_R'  : _mpl.colors.ListedColormap(list(zip(_cmb_data[::-1,0],_cmb_data[::-1,1],_cmb_data[::-1,2]))),
+           'HOT_R' : _mpl.colors.ListedColormap(list(zip(_cmb_data[:64:-1,0],_cmb_data[:64:-1,1],_cmb_data[:64:-1,2]))),
+           'COLD_R'   : _mpl.colors.ListedColormap(list(zip(_cmb_data[:64,0],_cmb_data[:64,1],_cmb_data[:64,2])))
            }
 
     # Palette spectral
@@ -271,8 +317,30 @@ def cleanupFigure(despine=True, tightenFigure=True):
     # Re-draw plot
     _plt.draw()
 
+def legend(outside=False,xmax=None,*args,**kwargs):
+    if outside:
+        _plt.legend(bbox_to_anchor=(1,1),*args,**kwargs)
+        _plt.gcf().subplots_adjust(right=0.8 if xmax is None else xmax)
+    else:
+        _plt.legend(*args,**kwargs)
 
-def colorbar(ticks,orientation='vertical',splitTicks=False,strFormat='%.2g',label=None,**kw):
+legend.__doc__ = _plt.legend.__doc__
+
+def xdateformat(xformat='%H:%M',autofmt=True):
+    """
+    set dateformat for x axis
+    """
+    # Auto
+    if autofmt:
+        fig = _plt.gcf()
+        fig.autofmt_xdate()
+    
+    # change format of x
+    ax = _plt.gca()
+    ax.xaxis.set_major_formatter(_mdates.DateFormatter(xformat))
+
+
+def colorbar(ticks=None,orientation='vertical',splitTicks=False,strFormat='%.2g',label=None,**kw):
     """
     Customized colorbar
 
@@ -302,13 +370,15 @@ def colorbar(ticks,orientation='vertical',splitTicks=False,strFormat='%.2g',labe
 
     # Default colorbar params
     cbParams = {'aspect'       : aspect,
-                'drawedges'    : True if len(_plt.gca().collections) < 22 else False,
+                'drawedges'    : True if ((len(_plt.gca().collections) < 22) and (len(_plt.gca().collections) > 0)) else False,
                 'format'       : strFormat,
                 'orientation'  : orientation,
                 'pad'          : pad,
                 'spacing'      : 'proportional',
-                'ticks'        : ticks
+                #'ticks'        : ticks
                 }
+    if ticks is not None:
+        cbParams['ticks'] = ticks
 
     # Modify cb params
     cbParams.update(kw)
@@ -414,7 +484,6 @@ def add_text(text,loc=2,size=25,color='k',ax=None):
     return at
 
 
-
 def quadBezierCurve(p0=[0,0],p1=[0.5,1],p2=[1,0],n=100):
     """
     quadratic bézier curve
@@ -441,3 +510,16 @@ def cubicBezierCurve(p0=[0,0],p1=[0.5,1],p2=[0.5,1],p3=[1,0],n=100):
     p3 = _np.array(p3).reshape(-1,1)
     
     return (1-t)*quadBezierCurve(p0,p1,p2,n) + t*quadBezierCurve(p1,p2,p3,n)
+
+
+
+# def labels(xlabel=None, ylabel=None, title=None):
+#     """
+#     Add labels: x,y, and title
+#     """
+#     if xlabel is not None:
+#         _plt.xlabel(xlabel)
+#     if ylabel is not None:
+#         _plt.ylabel(ylabel)
+#     if title is not None:
+#         _plt.title(title)
