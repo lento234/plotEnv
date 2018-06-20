@@ -74,9 +74,8 @@ DEFAULT_RCPARAMS = {'axes.axisbelow'  : True,
                     'axes.linewidth'  : 1.25,
                     'axes.titlesize'  : 12,
                     'figure.figsize'  : _np.array([2./(_np.sqrt(5)-1), 1])*5,
-                    'font.family'     : ['sans-serif'], #['sans-serif'],
-                    'font.sans-serif' : ['Helvetica'],# 'Arial', 'DejaVu Sans', 'sans-serif'],
-		    'font.serif'      : ['Times'], #, 'Times New Roman', 'serif'], Palatino			    
+                    #'font.family'     : ['sans-serif'],
+                    #'font.sans-serif' : ['Arial', 'Liberation Sans',
                     #                     'Bitstream Vera Sans', 'sans-serif'],
                     'grid.color'      : '0.8',
                     'grid.linestyle'  : '-',
@@ -97,7 +96,7 @@ DEFAULT_RCPARAMS = {'axes.axisbelow'  : True,
                     'savefig.dpi'     : 350,
                     'savefig.format'  : 'pdf',
                     #'text.color'      : '0.15',
-                    'text.usetex'     : True,
+                    #'text.usetex'     : True,
                     #'text.latex.unicode' : True,
                     #'xtick.color'     : '0.15',
                     #'xtick.direction' : 'out',
@@ -221,7 +220,6 @@ def initialize(plotType='both', numColors=10, interactive=True):
     # Set matplotlib rc parameters
     _mpl.rcParams.update(rcParams)
 
-    print('Done!')
     return palette
 
 
@@ -485,9 +483,9 @@ def imagegrid(fig,nrow_ncols,xlabel=None,ylabel=None,**kwargs):
     return grid
 
 
-def add_text(text,loc=2,size=25,color='k',ax=None,weight='bold',borderpad=0.2):
-    at = _AnchoredText(text, loc=loc, prop=dict(size=size,weight=weight,color=color),
-                      pad=0., borderpad=borderpad,frameon=False)
+def add_text(text,loc=2,size=25,color='k',ax=None):
+    at = _AnchoredText(text, loc=loc, prop=dict(size=size,weight='bold',color=color),
+                      pad=0., borderpad=0.2,frameon=False)
     
     if ax is None:
         ax = _plt.gca()
