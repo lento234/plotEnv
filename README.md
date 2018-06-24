@@ -1,10 +1,8 @@
 # plotenv
-=========
-
+    
     Python plotting wrapper utilizing matplotlib and seaborn
 
 # Changelog
------------
 
 ## 0.1:
 
@@ -23,15 +21,13 @@
 - added `plotenv`: custom plotting wrapper
 
 # Authors
--------
 
     * Lento Manickathan (lento.manickathan@gmail.com)
 
 # Dependencies
-------------
 
 ## python:
-    python 2.7.x
+    python 3.6.x
 
 ## python requirement:
     The following python modules must be installed:
@@ -40,7 +36,6 @@
         * seaborn (plotting)
 
 # Installation
---------------
 
 To install the development version, run
 
