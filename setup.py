@@ -34,6 +34,8 @@ def check_dependencies():
 
     return install_requires
 
+with open('README.md','r') as fh:
+    long_description = fh.read()
 
 if __name__ == "__main__":
 
@@ -43,6 +45,8 @@ if __name__ == "__main__":
         maintainer=MAINTAINER,
         maintainer_email=MAINTAINER_EMAIL,
         description=DESCRIPTION,
+	long_description=long_description,
+	long_description_content_type='text/markdown',
         license=LICENSE,
         keywords='python plotting wrapper',
         url=URL,
