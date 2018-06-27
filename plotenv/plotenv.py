@@ -353,7 +353,8 @@ def xdateformat(xformat='%H:%M',autofmt=True):
     ax.xaxis.set_major_formatter(_mdates.DateFormatter(xformat))
 
 
-def colorbar(ticks=None,orientation='vertical',splitTicks=False,strFormat='%.2g',label=None,**kw):
+def colorbar(im=None,ax=None,ticks=None,orientation='vertical',
+		splitTicks=False,strFormat='%.2g',label=None,drawEdges=True,**kw):
     """
     Customized colorbar
 
@@ -383,7 +384,7 @@ def colorbar(ticks=None,orientation='vertical',splitTicks=False,strFormat='%.2g'
 
     # Default colorbar params
     cbParams = {'aspect'       : aspect,
-                'drawedges'    : True if ((len(_plt.gca().collections) < 22) and (len(_plt.gca().collections) > 0)) else False,
+                'drawedges'    : True if ((len(_plt.gca().collections) < 22) and (len(_plt.gca().collections) > 0) and drawEdges) else False,
                 'format'       : strFormat,
                 'orientation'  : orientation,
                 'pad'          : pad,
@@ -400,7 +401,12 @@ def colorbar(ticks=None,orientation='vertical',splitTicks=False,strFormat='%.2g'
         cbParams['format'] = None # Default
 
     # Draw colorbar
-    cb = _plt.colorbar(**cbParams)
+    if im is None:
+	    im=_plt.gci()
+    if ax is None:
+	    ax=_plt.gca()
+
+    cb = _plt.colorbar(mappable=im,ax=ax,**cbParams)
 
     # Split ticks
     if splitTicks:

@@ -3,16 +3,15 @@ Basic: Simple plotting
 ======================
 """
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 # Plotting wrapper
-import plotenv
+import plotenv as pen
 
 # Setting up plotting environment
-palette = plotenv.set(plotType='surface',
-                      interactive=True) # returns palette
-                      
+palette = pen.initialize()
+cmap = palette['CMB']['DIV']
+
 
 # Generate data
 xi = np.linspace(-1,1,100)
@@ -21,78 +20,14 @@ Z = np.cos(3*X)*np.sin(2*Y)
 
 # Levels and ticks
 levels = np.linspace(xi.min(),xi.max(),22)
-ticks  = np.linspace(xi.min(),xi.max(),11)
-
-# Plot - CMB DIV cmap
-plt.figure()
-plt.contourf(X,Y,Z,cmap=palette['CMB']['DIV'],levels=levels)
-plt.axis('scaled')
-plt.axis('scaled')
-
-# Customization
-plotenv.colorbar(ticks=ticks,
-                 orientation='v',
-                 format='%.2f',label=r'$z=\cos(3x)\ \sin(2y)$')
-plotenv.cleanupFigure(despine=False)
-
-
-# Plot - CMB HOT cmap
-plt.figure()
-plt.contourf(X,Y,Z,cmap=palette['CMB']['HOT'],levels=levels)
-plt.axis('scaled')
-plt.axis('scaled')
-
-# Customization
-plotenv.colorbar(ticks=ticks,
-                 orientation='v',
-                 format='%.2f',label=r'$z=\cos(3x)\ \sin(2y)$')
-plotenv.cleanupFigure(despine=False)
-
-# Plot - CMB COLD cmap
-plt.figure()
-plt.contourf(X,Y,Z,cmap=palette['CMB']['COLD'],levels=levels)
-plt.axis('scaled')
-plt.axis('scaled')
-
-# Customization
-plotenv.colorbar(ticks=ticks,
-                 orientation='v',
-                 format='%.2f',label=r'$z=\cos(3x)\ \sin(2y)$')
-plotenv.cleanupFigure(despine=False)
+ticks  = levels[::2]
 
 # Plot - SPECTRAL DIV cmap
-plt.figure()
-plt.contourf(X,Y,Z,cmap=palette['SPECTRAL']['DIV'],levels=levels)
-plt.axis('scaled')
-plt.axis('scaled')
+fig, ax = pen.figure(figsize=(8,5))
+im = ax.contourf(X,Y,Z,cmap=cmap,levels=levels)
+ax.axis('scaled')
+ax.set(xlabel='$x$ (unit)',ylabel='$y$ (unit)')
+pen.colorbar(im,ax,drawEdges=True)
 
-# Customization
-plotenv.colorbar(ticks=ticks,
-                 orientation='v',
-                 format='%.2f',label=r'$z=\cos(3x)\ \sin(2y)$')
-plotenv.cleanupFigure(despine=False)
-
-
-# Plot - SPECTRAL HOT cmap
-plt.figure()
-plt.contourf(X,Y,Z,cmap=palette['SPECTRAL']['HOT'],levels=levels)
-plt.axis('scaled')
-plt.axis('scaled')
-
-# Customization
-plotenv.colorbar(ticks=ticks,
-                 orientation='v',
-                 format='%.2f',label=r'$z=\cos(3x)\ \sin(2y)$')
-plotenv.cleanupFigure(despine=False)
-
-# Plot - SPECTRAL COLD cmap
-plt.figure()
-plt.contourf(X,Y,Z,cmap=palette['SPECTRAL']['COLD'],levels=levels)
-plt.axis('scaled')
-plt.axis('scaled')
-
-# Customization
-plotenv.colorbar(ticks=ticks,
-                 orientation='v',
-                 format='%.2f',label=r'$z=\cos(3x)\ \sin(2y)$')
-plotenv.cleanupFigure(despine=False)
+# Cleanup
+pen.cleanupFigure(despine=False)
