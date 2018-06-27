@@ -47,7 +47,8 @@ COLOR_FLATUI = {'red'      : '#e74c3c',
                 'darkgreen': '#16a085',
                 'orange'   : '#d35400',
                 'darkred'  : '#c0392b',
-                'darkblue' : '#2980b9'}
+                'darkblue' : '#2980b9',
+		'black'    : 'k'}
 
 COLOR_MPL = {'blue'    : '#1f77b4',
              'orange'   : '#ff7f0e',
@@ -58,7 +59,8 @@ COLOR_MPL = {'blue'    : '#1f77b4',
              'pink'     : '#e377c2',
              'gray'     : '#7f7f7f',
              'olive'    : '#bcbd22',
-             'cyan'     : '#17becf'}
+             'cyan'     : '#17becf',
+	     'black'    : 'k'}
 
 
 # Marker style
@@ -220,6 +222,10 @@ def initialize(plotType='both', numColors=10, interactive=True):
 
     # Set matplotlib rc parameters
     _mpl.rcParams.update(rcParams)
+
+    # Add mpl and flatui palette
+    palette['mpl'] = COLOR_MPL
+    palette['flatui'] = COLOR_FLATUI
 
     print('Done!')
     return palette
