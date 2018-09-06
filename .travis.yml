@@ -3,4 +3,4 @@ sudo: false
 python:
     - "3.6"
 script:
-    python -c "import plotenv"
+    python -c "import plotenv; print('Success!')"
