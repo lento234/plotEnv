@@ -76,10 +76,9 @@ DEFAULT_RCPARAMS = {'axes.axisbelow'  : True,
                     'axes.linewidth'  : 1.25,
                     'axes.titlesize'  : 12,
                     'figure.figsize'  : _np.array([2./(_np.sqrt(5)-1), 1])*5,
-                    'font.family'     : ['sans-serif'], #['sans-serif'],
-                    'font.sans-serif' : ['Helvetica'],# 'Arial', 'DejaVu Sans', 'sans-serif'],
-		    'font.serif'      : ['Times'], #, 'Times New Roman', 'serif'], Palatino			    
-                    #                     'Bitstream Vera Sans', 'sans-serif'],
+                    #'font.family'     : ['sans-serif','serif'], #['sans-serif'],
+                    'font.sans-serif' : ['DejaVu Sans','Helvetica', 'Arial', 'sans-serif'],
+		    'font.serif'      : ['Times', 'Times New Roman', 'Palatino', 'serif'],
                     'grid.color'      : '0.8',
                     'grid.linestyle'  : '-',
                     'grid.linewidth'  : 1,
@@ -90,11 +89,11 @@ DEFAULT_RCPARAMS = {'axes.axisbelow'  : True,
                     'legend.labelspacing': 0.05,
                     'legend.numpoints': 1,
                     'legend.scatterpoints' : 1,
-                    'lines.linewidth' : 2,#1.2,
+                    'lines.linewidth' : 2, #1.2,
                     'lines.markeredgewidth' : 0.,
                     'lines.markersize': 12,
                     'lines.solid_capstyle' : 'round',
-                    'mathtext.fontset': 'cm',
+                    'mathtext.fontset': 'stix', #'cm',
                     'patch.linewidth' : .3,
                     'savefig.dpi'     : 350,
                     'savefig.format'  : 'pdf',
@@ -200,25 +199,27 @@ def initialize(plotType='both', numColors=10, interactive=True):
     rcParams['interactive'] = interactive
 
     # Determine plot type
-    if plotType == 'line':
+    #if plotType == 'line':
+    #	
+    #    # Set Palette
+    #    palette = linePlotPalette(numColors)
+    #    #rcParams['axes.color_cycle'] = list(palette)
+    #    rcParams['axes.prop_cycle'] = _cycler('color', list(palette))
+    #
+    #elif plotType == 'surface':
+    #	
+    #    # Set Palette
+    #    palette = surfacePlotPalette()
 
-        # Set Palette
-        palette = linePlotPalette(numColors)
-        #rcParams['axes.color_cycle'] = list(palette)
-        rcParams['axes.prop_cycle'] = _cycler('color', list(palette))
-
-    elif plotType == 'surface':
-
-        # Set Palette
-        palette = surfacePlotPalette()
-
-    elif plotType == 'both':
+    
+    #elif plotType == 'both':
         # Set colormap palette
-        palette = surfacePlotPalette()
-        palette['colors'] = linePlotPalette(numColors)
-        rcParams['axes.prop_cycle'] = _cycler('color', list(palette['colors']))
-    else:
-        return NotImplementedError('plot type unknown or not implemented')
+    palette = surfacePlotPalette()
+    palette['colors'] = linePlotPalette(numColors)
+    rcParams['axes.prop_cycle'] = _cycler('color', list(palette['colors']))
+    
+    #else:
+    #    return NotImplementedError('plot type unknown or not implemented')
 
     # Set matplotlib rc parameters
     _mpl.rcParams.update(rcParams)
@@ -250,10 +251,13 @@ def linePlotPalette(numColors):
     # Define the color palatte
     if numColors == 1:
         # Midnight blue
-        palette = [PUREBLACK]
+        palette = ['k']
 
+    elif numColors == 2:
+    	palette = [COLOR_MPL['black'],COLOR_MPL['red']]
+	
     elif numColors == 3:
-        palette = [PUREBLACK,DARKRED,DARKBLUE]
+        palette = [COLOR_MPL['black'],COLOR_MPL['red'],COLOR_MPL['blue']]
 
     # elif numColors > 3 and numColors <= 9:
     #     # Alizarin, Peter river, Emerald, Sun Flower, Wisteria, Midnight blue
