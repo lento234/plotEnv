@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/lento234/plotenv.svg?branch=master)](https://travis-ci.com/lento234/plotenv)
+
 # plotenv
     
     Python plotting wrapper utilizing matplotlib and seaborn
