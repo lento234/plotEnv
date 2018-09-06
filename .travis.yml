@@ -1,6 +1,12 @@
 language: python
 sudo: false
 python:
+    - "3.4"
+    - "3.5"
     - "3.6"
+install:
+    - pip install -r requirements.txt
+    - python setup.py -q install
 script:
-    python -c "import plotenv; print('Success!')"
+    - cd
+    - python -c "import plotenv; plotenv.initialize(); print('Success!')"
