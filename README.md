@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/lento234/plotenv.svg?branch=master)](https://travis-ci.com/lento234/plotenv)
 [![CircleCI](https://circleci.com/gh/lento234/plotenv.svg?style=svg)](https://circleci.com/gh/lento234/plotenv)
+[![PyPI version](https://badge.fury.io/py/plotEnv.svg)](https://badge.fury.io/py/plotEnv)
 
 # plotenv
     
