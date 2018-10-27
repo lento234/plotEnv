@@ -48,7 +48,7 @@ COLOR_FLATUI = {'red'      : '#e74c3c',
                 'orange'   : '#d35400',
                 'darkred'  : '#c0392b',
                 'darkblue' : '#2980b9',
-		'black'    : 'k'}
+		        'black'    : 'k'}
 
 COLOR_MPL = {'blue'    : '#1f77b4',
              'orange'   : '#ff7f0e',
@@ -60,7 +60,7 @@ COLOR_MPL = {'blue'    : '#1f77b4',
              'gray'     : '#7f7f7f',
              'olive'    : '#bcbd22',
              'cyan'     : '#17becf',
-	     'black'    : 'k'}
+	         'black'    : 'k'}
 
 
 # Marker style
@@ -77,8 +77,12 @@ DEFAULT_RCPARAMS = {'axes.axisbelow'  : True,
                     'axes.titlesize'  : 12,
                     'figure.figsize'  : _np.array([2./(_np.sqrt(5)-1), 1])*5,
                     #'font.family'     : ['sans-serif','serif'], #['sans-serif'],
-                    'font.sans-serif' : ['DejaVu Sans','Helvetica', 'Arial', 'sans-serif'],
-		    'font.serif'      : ['Times', 'Times New Roman', 'Palatino', 'serif'],
+                    #'font.sans-serif' : ['DejaVu Sans','Helvetica', 'Arial', 'sans-serif'],
+		            #'font.serif'      : ['Times', 'Times New Roman', 'Palatino', 'serif'],
+                    #'font.family'     : ['serif','sans-serif'],
+                    'font.sans-serif' : ['Computer Modern Sans serif','Helvetica', 'Arial', 'sans-serif'],
+		            'font.serif'      : ['Palatino', 'serif'],
+                    'font.cursive'    : 'Zapf Chancery',
                     'grid.color'      : '0.8',
                     'grid.linestyle'  : '-',
                     'grid.linewidth'  : 1,
@@ -502,14 +506,12 @@ def imagegrid(fig,nrow_ncols,xlabel=None,ylabel=None,**kwargs):
 
 
 def add_text(text,loc=2,size=25,color='k',ax=None,weight='bold',borderpad=0.2):
-    at = _AnchoredText(text, loc=loc, prop=dict(size=size,weight=weight,color=color),
+    at = _AnchoredText(r'\textbf{{{}}}'.format(text), loc=loc, prop=dict(size=size,weight=weight,color=color),
                       pad=0., borderpad=borderpad,frameon=False)
-    
     if ax is None:
         ax = _plt.gca()
     ax.add_artist(at)
     #at.txt._text.set_path_effects([_withStroke(foreground="w", linewidth=3)])
-
     return at
 
 
