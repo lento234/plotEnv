@@ -4,47 +4,16 @@
 
 # plotenv
     
-    Python plotting wrapper utilizing matplotlib and seaborn
+    The ultimate matplotlib wrapper.
 
-# Changelog
+This library simply wrappers matplotlib providing a collection of handy function for publication quality plots. No more messy matplotlib coding and searching stackoverflow to figure out how you got it working last time.
 
-## 0.1:
+## Installation
 
-- ported to python3
-- cleaned up customization
-- added default matplotlib colors
+Using pip from pypi:
 
-## 0.0.2.dev1:
+    $ pip install plotenv
 
-- added `examples`: basic single line plot, multi-line plot and contourf plot
-- reorganized modules
-- added custom cosmic microwave background (CMB) colormap
+or directly from github:
 
-## 0.0.1.dev2:
-
-- added `plotenv`: custom plotting wrapper
-
-# Authors
-
-    * Lento Manickathan (lento.manickathan@gmail.com)
-
-# Dependencies
-
-## python:
-    python 3.6.x
-
-## python requirement:
-    The following python modules must be installed:
-        * numpy
-        * matplotlib (plotting)
-        * seaborn (plotting)
-
-# Installation
-
-To install the development version, run
-
-    pip install plotenv
-
-or alternatively
-
-    pip install git+git://github.com/lento234/plotenv.git
+    $ pip install git+git://github.com/lento234/plotenv.git

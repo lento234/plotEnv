@@ -1,61 +1,36 @@
 #! /usr/bin/env python
 
 import os
+import configparser
+from setuptools import setup, find_packages
 
-DESCRIPTION   = "Python plotting wrapper utilizing matplotlib and seaborn"
+conf = configparser.ConfigParser()
+conf.read(['setup.cfg'])
+metadata = dict(conf.items('metadata'))
 
-PKGNAME = 'plotenv'
-MAINTAINER = 'Lento Manickathan'
-MAINTAINER_EMAIL = 'lento.manickathan@gmail.com'
-URL = 'https://github.com/lento234/plotenv'
-LICENSE = 'GNU General Public License (GPL)'
-VERSION = '0.1.2'
+# Get the long description from the README file
+with open(os.path.join('README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
-try:
-    from setuptools import setup
-    _has_setuptools = True
-except ImportError:
-    from distutils.core import setup
-
-def check_dependencies():
-    install_requires = []
-    try:
-        import numpy
-    except ImportError:
-        install_requires.append('numpy')
-    try:
-        import matplotlib
-    except ImportError:
-        install_requires.append('matplotlib')
-    try:
-        import seaborn
-    except ImportError:
-        install_requires.append('seaborn')
-
-    return install_requires
-
-with open('README.md','r') as fh:
-    long_description = fh.read()
 
 if __name__ == "__main__":
-
-    setup(name=PKGNAME,
-        author=MAINTAINER,
-        author_email=MAINTAINER_EMAIL,
-        maintainer=MAINTAINER,
-        maintainer_email=MAINTAINER_EMAIL,
-        description=DESCRIPTION,
-	long_description=long_description,
-	long_description_content_type='text/markdown',
-        license=LICENSE,
-        keywords='python plotting wrapper',
-        url=URL,
-        version=VERSION,
-        install_requires=check_dependencies(),
-        packages=['plotenv'],
-        classifiers=['Intended Audience :: Science/Research',
-                     'License :: OSI Approved :: GNU General Public License (GPL)',
-                     'Topic :: Scientific/Engineering :: Visualization',
-                     'Operating System :: POSIX',
-                     'Programming Language :: Python :: 3.6',
-                     ])
+    setup(
+        name=metadata['package_name'],
+        description=metadata['description'],
+        version=metadata['version'],
+        url=metadata['url'],
+        author=metadata['author'],
+        author_email=metadata['author_email'],
+        long_description=long_description,
+    	long_description_content_type='text/markdown',
+        license=metadata['license'],
+        packages=find_packages(),
+        #install_requires=check_dependencies(),
+        classifiers=[
+            'Intended Audience :: Science/Research',
+            'License :: OSI Approved :: GNU General Public License (GPL)',
+            'Topic :: Scientific/Engineering :: Visualization',
+            'Operating System :: POSIX',
+            'Programming Language :: Python :: 3.8',
+        ],
+    )

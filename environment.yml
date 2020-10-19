@@ -1,0 +1,12 @@
+channels:
+  - conda-forge
+name: plotenv
+dependencies:
+  - ipython
+  - matplotlib
+  - numpy
+  - pip
+  - pytest
+  - python=3.8
+  - setuptools
+  - tqdm
